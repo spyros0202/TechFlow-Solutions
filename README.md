@@ -121,8 +121,12 @@ automation_project/
 Your .env file with GOOGLE_API_KEY
 
 ```
-docker compose build
-docker compose up
+docker compose up --build
+```
+Visit:
+
+```
+http://127.0.0.1:8001/
 ```
 
 ---
