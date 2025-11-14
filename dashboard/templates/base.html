@@ -7,55 +7,129 @@
     <title>AthenaGen Automation Dashboard</title>
 
     <!-- Tailwind -->
-     <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
 
     <style>
-        body { font-family: Inter, system-ui, sans-serif; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+            min-height: 100vh;
+        }
+
+        /* Smooth transitions */
+        * {
+            transition: all 0.2s ease;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-900">
+<body class="text-gray-900 antialiased">
 
     <!-- Navbar -->
-    <nav class="bg-gray-900 text-white px-6 py-4 shadow-lg">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <a href="{% url 'dashboard' %}" class="text-xl font-semibold tracking-tight">
-                TechFlow – Automation System
-            </a>
+    <nav class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white shadow-2xl border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo/Brand -->
+                <a href="{% url 'dashboard' %}" class="group flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-emerald-500 rounded-lg flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold tracking-tight">TechFlow</h1>
+                        <p class="text-xs text-gray-400">Automation System</p>
+                    </div>
+                </a>
 
-            <form action="{% url 'scan' %}" method="post">
-                {% csrf_token %}
-                <button class="bg-emerald-500 hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm">
-                    Run Scan
-                </button>
-            </form>
-            <a href="{% url 'export_items' %}?status={{ request.GET.status|default:'all' }}"
-               class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm ml-2">
-                Export Excel
-            </a>
+                <!-- Actions -->
+                <div class="flex items-center gap-3">
+                    <form action="{% url 'scan' %}" method="post">
+                        {% csrf_token %}
+                        <button class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-5 py-2.5 rounded-lg text-sm font-medium shadow-lg hover:shadow-emerald-500/50 hover:-translate-y-0.5">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                            Run Scan
+                        </button>
+                    </form>
+
+                    <a href="{% url 'export_items' %}?status={{ request.GET.status|default:'all' }}"
+                       class="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-lg text-sm font-medium shadow-lg hover:shadow-blue-500/50 hover:-translate-y-0.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        Export Excel
+                    </a>
+                </div>
+            </div>
         </div>
     </nav>
 
     <!-- Flash Messages -->
-    <div class="max-w-7xl mx-auto mt-4 px-6">
+    <div class="max-w-7xl mx-auto mt-6 px-6">
         {% if messages %}
             {% for message in messages %}
-                <div class="mb-4 p-4 rounded-lg border 
-                    {% if message.tags == 'success' %} bg-emerald-100 border-emerald-300 text-emerald-900
-                    {% elif message.tags == 'error' %} bg-red-100 border-red-300 text-red-900
-                    {% elif message.tags == 'warning' %} bg-yellow-100 border-yellow-300 text-yellow-900
-                    {% else %} bg-blue-100 border-blue-300 text-blue-900
+                <div class="mb-4 p-4 rounded-xl border shadow-lg backdrop-blur-sm animate-slide-down
+                    {% if message.tags == 'success' %} bg-emerald-50 border-emerald-300 text-emerald-900
+                    {% elif message.tags == 'error' %} bg-red-50 border-red-300 text-red-900
+                    {% elif message.tags == 'warning' %} bg-yellow-50 border-yellow-300 text-yellow-900
+                    {% else %} bg-blue-50 border-blue-300 text-blue-900
                     {% endif %}
                 ">
-                    {{ message }}
+                    <div class="flex items-start gap-3">
+                        <div class="flex-shrink-0 mt-0.5">
+                            {% if message.tags == 'success' %}
+                                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            {% elif message.tags == 'error' %}
+                                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            {% elif message.tags == 'warning' %}
+                                <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                </svg>
+                            {% else %}
+                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            {% endif %}
+                        </div>
+                        <div class="flex-1 font-medium">{{ message }}</div>
+                    </div>
                 </div>
             {% endfor %}
         {% endif %}
     </div>
 
     <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-6 py-6">
+    <div class="max-w-7xl mx-auto px-6 py-8">
         {% block content %}{% endblock %}
     </div>
 
+    <!-- Chart.js CDN (for charts on dashboard) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
