@@ -184,21 +184,8 @@ Download-the-dashboard button exports everything to XLSX.
 
 ---
 
-# **7. Testing**
 
-Run everything:
-
-```
-pytest
-```
-
-You get:
-- 100% passing tests
-- Unit + integration + e2e + parser tests
-
----
-
-# **8. License**
+# **7. License**
 
 Internal Assignment – AthenaGen AI  
 For evaluation purposes only.
