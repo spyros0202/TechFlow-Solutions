@@ -164,6 +164,8 @@ http://127.0.0.1:8000/
 
 # **5. Docker Deployment**
 
+Your .env file with GOOGLE_API_KEY
+
 ```
 docker compose build
 docker compose up
