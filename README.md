@@ -1,6 +1,4 @@
-TechFlow Automation Platform
-AthenaGen AI – Solutions Engineer Assignment
-**Author:** Spyros Vythoulkas  
+# AGAI Assignment - Solutions Engineer
 
 ---
 
