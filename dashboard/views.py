@@ -1,16 +1,15 @@
 import logging
-from io import BytesIO
-
-import pandas as pd
 from django.contrib import messages
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-
 from core.models import ExtractedItem
 from parsers.pipeline import run_full_scan
 from core.utils.export_dashboard import build_multi_sheet_workbook, update_dashboard_snapshot
 
 logger = logging.getLogger(__name__)
+from django.http import HttpResponse, JsonResponse
+from django.utils import timezone
+from django.db.models import Count
+from django.db.models.functions import TruncDate
 
 
 def dashboard(request):
@@ -90,3 +89,84 @@ def detail(request, pk):
         return redirect("dashboard")
 
     return render(request, "detail.html", {"item": item})
+
+
+def metrics_status_counts(request):
+    """
+    API: returns counts per status
+    {
+      "pending": 5,
+      "approved": 10,
+      "rejected": 1,
+      "error": 2
+    }
+    """
+    qs = (
+        ExtractedItem.objects
+        .values("status")
+        .annotate(count=Count("id"))
+    )
+    data = {row["status"]: row["count"] for row in qs}
+    # Ensure all keys exist
+    for key in ["pending", "approved", "rejected", "error"]:
+        data.setdefault(key, 0)
+    return JsonResponse(data)
+
+
+def metrics_source_counts(request):
+    """
+    API: returns counts per source_type
+    {
+      "form": 5,
+      "email": 7,
+      "invoice": 10
+    }
+    """
+    qs = (
+        ExtractedItem.objects
+        .values("source_type")
+        .annotate(count=Count("id"))
+    )
+    data = {row["source_type"]: row["count"] for row in qs}
+    return JsonResponse(data)
+
+
+def metrics_daily_counts(request):
+    """
+    API: returns daily counts per status for the last 14 days
+    [
+      {"date": "2025-11-01", "pending": 3, "approved": 1, "rejected": 0, "error": 0},
+      ...
+    ]
+    """
+    today = timezone.now().date()
+    start_date = today - timezone.timedelta(days=13)
+
+    qs = (
+        ExtractedItem.objects
+        .filter(created_at__date__gte=start_date)
+        .annotate(day=TruncDate("created_at"))
+        .values("day", "status")
+        .annotate(count=Count("id"))
+        .order_by("day")
+    )
+
+    # Build a map: day -> {status -> count}
+    days_map = {}
+    for row in qs:
+        day = row["day"]
+        status = row["status"]
+        count = row["count"]
+        days_map.setdefault(day, {"pending": 0, "approved": 0, "rejected": 0, "error": 0})
+        days_map[day][status] = count
+
+    # Normalize to all days (even if 0)
+    result = []
+    for i in range(14):
+        d = start_date + timezone.timedelta(days=i)
+        base = {"date": d.isoformat(), "pending": 0, "approved": 0, "rejected": 0, "error": 0}
+        if d in days_map:
+            base.update(days_map[d])
+        result.append(base)
+
+    return JsonResponse(result, safe=False)
