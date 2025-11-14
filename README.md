@@ -128,7 +128,12 @@ automation_project/
 # **4. Docker Deployment**
 
 Mandatory to have a .env file even if it's empty( with GOOGLE_API_KEY, optional)
+## **Clone the repository**
 
+```
+git clone https://github.com/spyros0202/TechFlow-Solutions.git
+cd TechFlow-Solutions
+```
 ```
 docker compose up --build
 ```
@@ -136,53 +141,6 @@ Visit:
 
 ```
 http://127.0.0.1:8001/
-```
-
----
-
-# **5. Installation & Setup**
-
-## **Clone the repository**
-
-```
-git clone https://github.com/spyros0202/TechFlow-Solutions.git
-cd TechFlow-Solutions
-```
-
-## **Create virtual environment**
-
-```
-python -m venv venv
-venv/Scripts/activate
-```
-
-## **Install dependencies**
-
-```
-pip install -r requirements.txt
-```
-## **Your .env file**
-
-Mandatory to have a .env file even if it's empty( with GOOGLE_API_KEY, optional)
-
-
-## **Run migrations**
-
-```
-python manage.py makemigrations
-python manage.py migrate
-```
-
-## **Start server**
-
-```
-python manage.py runserver
-```
-
-Visit:
-
-```
-http://127.0.0.1:8000/
 ```
 
 ---
