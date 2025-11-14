@@ -4,7 +4,6 @@ from parsers.forms_parser import parse_form
 def test_parse_form_invalid():
     html = "<html><broken>"
 
-    # Parser should NEVER throw — this is the key rule
     data = parse_form(html)
 
     # Must always return a dict

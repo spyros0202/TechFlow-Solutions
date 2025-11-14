@@ -49,23 +49,52 @@ def classify_email_with_gemini(email_text: str) -> str:
     except Exception:
         return "Unknown"
 
-
 def parse_email(raw):
     data = {}
 
-    # Name
-    m = re.search(r"Name:\s*(.*)", raw, re.IGNORECASE)
-    if m:
-        data["name"] = m.group(1).strip()
+    # Classify the email first
+    email_category = classify_email_with_gemini(raw)
+    if email_category and email_category != "Unknown":
+        data["category"] = email_category
 
-    # Email
-    m = re.search(r"Email:\s*(.*)", raw, re.IGNORECASE)
-    if m:
-        data["email"] = m.group(1).strip()
+    # Try structured parsing first (with labels) - supports both English and Greek
+    name = safe_search(r"(?:Name|Όνομα):\s*(.*)", raw)
+    email = safe_search(r"(?:Email):\s*(.*)", raw)
+    phone = safe_search(r"(?:Phone|Κινητό|Τηλέφωνο):\s*(.*)", raw)
 
-    # Phone
-    m = re.search(r"Phone:\s*(.*)", raw, re.IGNORECASE)
-    if m:
-        data["phone"] = m.group(1).strip()
+    # Also try to extract from bulleted lists
+    if not name:
+        name = safe_search(r"[-•]\s*(?:Όνομα|Name):\s*(.*)", raw)
+    if not email:
+        email = safe_search(r"[-•]\s*(?:Email):\s*(.*)", raw)
+    if not phone:
+        phone = safe_search(r"[-•]\s*(?:Κινητό|Phone|Τηλέφωνο):\s*(.*)", raw)
+
+    if name:
+        data["name"] = name
+    if email:
+        data["email"] = email
+    if phone:
+        data["phone"] = phone
+
+    # If no structured data found, try to extract email addresses directly
+    if not email:
+        email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+        email_matches = re.findall(email_pattern, raw)
+        if email_matches:
+            # Filter out generic emails
+            personal_emails = [e for e in email_matches if not e.startswith(('info@', 'contact@', 'support@'))]
+            if personal_emails:
+                data["email"] = personal_emails[0]
+            elif email_matches:
+                data["email"] = email_matches[0]
+
+    # Extract phone numbers if not found with label
+    if not phone:
+        # Greek phone patterns (mobile: 69XX-XXXXXX, landline: 2XXX-XXXXXX)
+        phone_pattern = r'(?:\+30\s?)?(?:69\d{2}[-\s]?\d{3}[-\s]?\d{3}|2[1-8]\d{2}[-\s]?\d{3}[-\s]?\d{3})'
+        phone_match = re.search(phone_pattern, raw)
+        if phone_match:
+            data["phone"] = phone_match.group(0).strip()
 
     return data
