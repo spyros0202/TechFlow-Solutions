@@ -137,6 +137,9 @@ venv/Scripts/activate
 ```
 pip install -r requirements.txt
 ```
+## **Your .env file
+
+ With GOOGLE_API_KEY
 
 ## **Run migrations**
 
