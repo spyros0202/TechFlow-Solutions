@@ -109,9 +109,13 @@ automation_project/
 │   ├── emails/
 │   ├── invoices/
 │   └── templates/
+├── tests/
+│   ├── test_forms_parser.py
+│   ├── test_email_parser.py
+│   ├── test_invoice_parser.py
+│   ├── test_pipeline.py
 │
-└── exports/
-    └── dashboard_export.xlsx
+└── manage.py
 ```
 
 ---
