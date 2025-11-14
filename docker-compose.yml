@@ -4,9 +4,9 @@ services:
   web:
     build: .
     container_name: automation_project_web
-    command: sh -c "python manage.py migrate && python manage.py runserver http://127.0.0.1:8001"
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8001"
     ports:
-      - "8000:8000"
+      - "8001:8001"
     env_file:
       - .env
     environment:
