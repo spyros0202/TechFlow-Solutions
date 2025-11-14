@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="text-2xl font-bold mb-4">Review Item #{{ item.id }}</h1>
+
+<!-- Error message if exists -->
+{% if item.error_message %}
+<div class="p-4 mb-6 bg-red-100 border border-red-300 text-red-900 rounded-lg">
+    <strong>Error:</strong> {{ item.error_message }}
+</div>
+{% endif %}
+
+<form method="post" class="bg-white p-6 shadow-lg rounded-lg mb-6">
+    {% csrf_token %}
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {% for key, value in item.data.items %}
+        <div>
+            <label class="block text-sm font-medium mb-1 capitalize">{{ key }}</label>
+            <input type="text" name="{{ key }}" value="{{ value }}"
+                   class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"/>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="flex gap-4 mt-6">
+        <button name="action" value="approve"
+                class="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700">
+            Approve & Save
+        </button>
+        <button name="action" value="reject"
+                class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+            Reject
+        </button>
+        <button name="action" value="save"
+                class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
+            Save as Pending
+        </button>
+    </div>
+</form>
+
+<!-- Raw Content Accordion -->
+<div class="bg-white p-6 shadow-lg rounded-lg">
+    <button onclick="document.getElementById('raw-content').classList.toggle('hidden')"
+            class="w-full text-left font-semibold text-gray-700 mb-2">
+        Raw Content ▼
+    </button>
+
+    <pre id="raw-content" class="hidden p-4 bg-gray-100 rounded-lg overflow-x-auto text-sm">
+{{ item.raw_content }}
+    </pre>
+</div>
+
+{% endblock %}

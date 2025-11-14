@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="text-2xl font-bold mb-6">Dashboard</h1>
+
+<!-- Filters -->
+<div class="flex gap-3 mb-6">
+    <a href="?status=pending" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-sm">Pending</a>
+    <a href="?status=approved" class="px-3 py-2 rounded bg-emerald-200 hover:bg-emerald-300 text-sm">Approved</a>
+    <a href="?status=rejected" class="px-3 py-2 rounded bg-yellow-200 hover:bg-yellow-300 text-sm">Rejected</a>
+    <a href="?status=error" class="px-3 py-2 rounded bg-red-200 hover:bg-red-300 text-sm">Error</a>
+    <a href="?status=all" class="px-3 py-2 rounded bg-gray-300 hover:bg-gray-400 text-sm">All</a>
+</div>
+
+<!-- Table -->
+<div class="bg-white shadow-lg rounded-lg overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+        <tr>
+            <th class="px-4 py-3 text-left font-medium text-gray-600">ID</th>
+            <th class="px-4 py-3 text-left font-medium text-gray-600">Type</th>
+            <th class="px-4 py-3 text-left font-medium text-gray-600">Source File</th>
+            <th class="px-4 py-3 text-left font-medium text-gray-600">Status</th>
+            <th class="px-4 py-3">Summary</th>
+        </tr>
+        </thead>
+
+        <tbody class="divide-y divide-gray-200 bg-white">
+
+        {% for item in items %}
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">{{ item.id }}</td>
+            <td class="px-4 py-3 capitalize">{{ item.source_type }}</td>
+            <td class="px-4 py-3">{{ item.source_file }}</td>
+
+            <td class="px-4 py-3">
+                {% if item.status == 'pending' %}
+                    <span class="px-3 py-1 bg-gray-200 rounded-full text-xs">Pending</span>
+                {% elif item.status == 'approved' %}
+                    <span class="px-3 py-1 bg-emerald-200 rounded-full text-xs">Approved</span>
+                {% elif item.status == 'rejected' %}
+                    <span class="px-3 py-1 bg-yellow-200 rounded-full text-xs">Rejected</span>
+                {% else %}
+                    <span class="px-3 py-1 bg-red-200 rounded-full text-xs">Error</span>
+                {% endif %}
+            </td>
+
+            <td class="px-4 py-3 text-right">
+                <a href="{% url 'detail' item.id %}"
+                   class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                    Review
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

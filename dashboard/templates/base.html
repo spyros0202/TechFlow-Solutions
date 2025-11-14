@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AthenaGen Automation Dashboard</title>
+
+    <!-- Tailwind -->
+     <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+    <style>
+        body { font-family: Inter, system-ui, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    <!-- Navbar -->
+    <nav class="bg-gray-900 text-white px-6 py-4 shadow-lg">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="{% url 'dashboard' %}" class="text-xl font-semibold tracking-tight">
+                TechFlow – Automation System
+            </a>
+
+            <form action="{% url 'scan' %}" method="post">
+                {% csrf_token %}
+                <button class="bg-emerald-500 hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm">
+                    Run Scan
+                </button>
+            </form>
+            <a href="{% url 'export_items' %}?status={{ request.GET.status|default:'all' }}"
+               class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm ml-2">
+                Export Excel
+            </a>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <div class="max-w-7xl mx-auto mt-4 px-6">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mb-4 p-4 rounded-lg border 
+                    {% if message.tags == 'success' %} bg-emerald-100 border-emerald-300 text-emerald-900
+                    {% elif message.tags == 'error' %} bg-red-100 border-red-300 text-red-900
+                    {% elif message.tags == 'warning' %} bg-yellow-100 border-yellow-300 text-yellow-900
+                    {% else %} bg-blue-100 border-blue-300 text-blue-900
+                    {% endif %}
+                ">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-6 py-6">
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+</html>

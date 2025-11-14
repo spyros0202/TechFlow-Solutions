@@ -1,0 +1,61 @@
+conda create --name agai_assigment python=3.10
+
+
+django-admin startproject techflow_automation
+
+
+pip install django
+
+
+cd automation_project
+
+
+python manage.py startapp core
+python manage.py startapp parsers
+python manage.py startapp dashboard
+
+
+automation_project/
+│
+├── automation_project/
+│   ├── settings.py
+│   ├── urls.py
+│
+├── core/
+│   ├── models.py
+│   ├── services/
+│   │   ├── excel.py     ← uses your template CSV
+│   │   └── logging.py
+│   ├── utils/
+│   ├── views.py
+│
+├── parsers/
+│   ├── forms_parser.py
+│   ├── email_parser.py
+│   ├── invoice_parser.py
+│   ├── pipeline.py
+│
+├── dashboard/
+│   ├── templates/
+│   │   ├── base.html
+│   │   ├── dashboard.html
+│   │   └── detail.html
+│   ├── views.py
+│
+├── dummy_data/
+│   ├── emails/
+│   ├── forms/
+│   ├── invoices/
+│   └── templates/
+│       ├── data_extraction_template.csv   ← USED in excel.py
+
+├── tests/
+│   ├── test_forms_parser.py
+│   ├── test_email_parser.py
+│   ├── test_invoice_parser.py
+│   ├── test_pipeline.py
+│
+└── manage.py
+
+
+npx @tailwindcss/cli -i ./dashboard/static/css/input.css -o ./dashboard/static/css/output.css --watch

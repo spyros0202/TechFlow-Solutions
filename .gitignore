@@ -1,0 +1,56 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# --- Environments ---
+.env
+*.env
+.env.*
+venv/
+.venv/
+env/
+ENV/
+
+# --- Django ---
+*.log
+db.sqlite3
+media/
+staticfiles/
+static/
+
+# --- Migrations (optional: keep them if needed) ---
+**/migrations/__pycache__/
+**/migrations/*.pyc
+
+# --- Byte-compiled / cache ---
+*.mo
+*.pot
+
+# --- IDE ---
+.idea/
+.vscode/
+*.code-workspace
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+
+# --- pytest ---
+.cache/
+.pytest_cache/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- Docker ---
+docker-compose.override.yml
+*.pid
+
+# --- Node / npm / Tailwind ---
+node_modules/
+dist/
+build/
+package-lock.json
