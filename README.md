@@ -127,7 +127,7 @@ automation_project/
 
 # **4. Docker Deployment**
 
-Your .env file with GOOGLE_API_KEY
+Your .env file with GOOGLE_API_KEY (optional)
 
 ```
 docker compose up --build
@@ -163,7 +163,7 @@ pip install -r requirements.txt
 ```
 ## **Your .env file**
 
- With GOOGLE_API_KEY
+ With GOOGLE_API_KEY (optional)
 
 ## **Run migrations**
 
