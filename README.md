@@ -109,11 +109,16 @@ automation_project/
 │   ├── emails/
 │   ├── invoices/
 │   └── templates/
+|
 ├── tests/
 │   ├── test_forms_parser.py
 │   ├── test_email_parser.py
 │   ├── test_invoice_parser.py
 │   ├── test_pipeline.py
+│   ├── test_e2e_dummy_data.py
+│   ├── test_export.py
+│   ├── test_error_handling.py
+│   ├── test_views_dashboard.py
 │
 └── manage.py
 ```
