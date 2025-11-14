@@ -116,7 +116,18 @@ automation_project/
 
 ---
 
-# **4. Installation & Setup**
+# **4. Docker Deployment**
+
+Your .env file with GOOGLE_API_KEY
+
+```
+docker compose build
+docker compose up
+```
+
+---
+
+# **5. Installation & Setup**
 
 ## **Clone the repository**
 
@@ -162,16 +173,6 @@ http://127.0.0.1:8000/
 
 ---
 
-# **5. Docker Deployment**
-
-Your .env file with GOOGLE_API_KEY
-
-```
-docker compose build
-docker compose up
-```
-
----
 
 # **6. Usage Guide**
 
