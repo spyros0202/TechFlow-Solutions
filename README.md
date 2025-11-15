@@ -137,11 +137,8 @@ cd TechFlow-Solutions
 ```
 docker compose up --build
 ```
-Visit:
-
-```
-http://127.0.0.1:8001/
-```
+The app will be available at:  
+👉 http://127.0.0.1:8001
 
 ---
 
